@@ -1,4 +1,6 @@
-public class Formular
+namespace Backend.Db_table
+{
+    public class Formular
 {
     public int IdFormular { get; set; }
     public int IdUser { get; set; }
@@ -9,12 +11,13 @@ public class Formular
     public DateTime Enddatum { get; set; }
     public TimeSpan? StartZeit { get; set; }
     public TimeSpan? EndZeit { get; set; }
-    public string Status { get; set; }
-    public string GrundDerBuchung { get; set; }
-    public string NameVonManager { get; set; }
-    
-    public User User { get; set; }
-    public User Manager { get; set; }
-    public Fahrzeuge Fahrzeuge { get; set; }
-    public Standort Standort { get; set; }
+    public string? Status { get; set; }
+    public string? GrundDerBuchung { get; set; }
+    public string? NameVonManager { get; set; }
+
+    public User? User { get; set; }
+    public User? Manager { get; set; }
+    public Fahrzeuge? Fahrzeuge { get; set; }
+    public Standort? Standort { get; set; }
+}
 }

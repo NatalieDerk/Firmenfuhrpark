@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {}
+    "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {
+    "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
+        "projectUniqueName": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
+        "projectPath": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\DERKNA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\obj\\",
+        "outputPath": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DERKNA\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -46,6 +46,20 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.21, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
