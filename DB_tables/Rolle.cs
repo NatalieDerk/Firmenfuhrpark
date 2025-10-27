@@ -1,4 +1,4 @@
-namespace Backend.Db_table
+namespace Backend.Db_tables
 {
     public class Rolle
 {

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Db_table
+namespace Backend.Db_tables
 {
     public class ApplicationDBContext : DbContext
     {

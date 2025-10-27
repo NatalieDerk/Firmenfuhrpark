@@ -1,8 +1,8 @@
-namespace Backend.Db_table
+namespace Backend.Db_tables
 {
     public class Formular
 {
-    public int IdFormular { get; set; }
+    public int IdForm { get; set; }
     public int IdUser { get; set; }
     public int IdManager { get; set; }
     public int IdCar { get; set; }
