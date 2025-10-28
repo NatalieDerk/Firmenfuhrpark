@@ -4,7 +4,7 @@ namespace Backend.Db_tables
 {
     public class ApplicationDBContext : DbContext
     {
-        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> opitons) : base(opitons) { }
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { }
 
         public DbSet<Rolle> Rollen { get; set; }
         public DbSet<User> Users { get; set; }
@@ -14,6 +14,12 @@ namespace Backend.Db_tables
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Rolle>().HasKey(r => r.IdRolle);
+            modelBuilder.Entity<User>().HasKey(u => u.IdUser);
+            modelBuilder.Entity<Standort>().HasKey(s => s.IdOrt);
+            modelBuilder.Entity<Fahrzeuge>().HasKey(f => f.IdCar);
+            modelBuilder.Entity<Formular>().HasKey(f => f.IdForm);
+
             modelBuilder.Entity<User>()
             .HasOne(u => u.Rolle)
             .WithMany(r => r.Users)

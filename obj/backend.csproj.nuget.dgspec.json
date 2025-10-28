@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {}
+    "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {}
   },
   "projects": {
-    "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {
+    "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
+        "projectPath": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\DERKNA\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\obj\\",
+        "outputPath": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DERKNA\\AppData\\Roaming\\NuGet\\NuGet.Config"

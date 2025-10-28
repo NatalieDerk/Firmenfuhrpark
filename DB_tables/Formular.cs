@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Backend.Db_tables
 {
     public class Formular
 {
+    [Key]
     public int IdForm { get; set; }
     public int IdUser { get; set; }
     public int IdManager { get; set; }

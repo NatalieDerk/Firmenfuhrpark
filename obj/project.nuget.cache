@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PDfrIR3p71I=",
+  "dgSpecHash": "XBZXb6PU474=",
   "success": true,
-  "projectFilePath": "c:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
+  "projectFilePath": "C:\\Users\\DERKNA\\Projekt\\autobuchung\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DERKNA\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\DERKNA\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.21\\microsoft.aspnetcore.openapi.8.0.21.nupkg.sha512",
