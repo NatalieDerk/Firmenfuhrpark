@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger(); // Generiert die Swagger-Dokumentation
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fuhpark API V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fuhpark API");
         c.RoutePrefix = string.Empty; // Swagger-UI über Root-URL erreichbar (http://localhost:5156)
     });
 }
