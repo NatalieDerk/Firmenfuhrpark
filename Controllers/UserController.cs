@@ -24,7 +24,18 @@ namespace Backend.Controllers
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.Include(u => u.Rolle).FirstOrDefaultAsync(u => u.IdUser == id);
-            if(user == null)
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return user;
+        }
+
+        [HttpGet("byname")]
+        public async Task<ActionResult<User>> GetUserByName([FromQuery] string vorname, [FromQuery] string nachname)
+        {
+            var user = await _context.Users.Include(u => u.Rolle).FirstOrDefaultAsync(u => u.vorname && u.Nachname == nachname );
+            if (user == null)
             {
                 return NotFound();
             }

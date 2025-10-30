@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdminForm } from './admin-form';
 
 describe('AdminForm', () => {
-  let component: AdminForm;
-  let fixture: ComponentFixture<AdminForm>;
+  var component: AdminForm;
+  var fixture: ComponentFixture<AdminForm>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
