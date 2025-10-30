@@ -12,9 +12,9 @@ import { Login } from '../login';
 @NgModule({
   declarations: [
     App,
+    Login,
     UserForm,
     AdminForm,
-    Login
   ],
   imports: [
     BrowserModule,
