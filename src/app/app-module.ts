@@ -7,12 +7,14 @@ import { App } from './app';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserForm } from './user-form/user-form';
 import { AdminForm } from './admin-form/admin-form';
+import { StatrSeite } from './start-seite/start-seite';
 
 @NgModule({
   declarations: [
     App,
     UserForm,
-    AdminForm
+    AdminForm,
+    StatrSeite
   ],
   imports: [
     BrowserModule,

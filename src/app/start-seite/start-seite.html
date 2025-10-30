@@ -1,0 +1,16 @@
+<div class="login-container">
+    <h2>Login</h2>
+    <form (ngSubmit)="onSubmit()" loginForm = "ngForm">
+        <div>
+            <label for="vorname">Vorname:</label>
+            <input type="text" id="vorname" name="vorname" [(ngModel)]="vorname" required />
+        </div>
+
+        <div>
+            <label for="nachname">Nachname:</label>
+            <input type="text" id="nachname" name="nachname" [(ngModel)]="nachname" required />
+        </div>
+
+        <button type="submit" [disabled]="!loginForm.form.valid">Login</button>
+    </form>
+</div>
