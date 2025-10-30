@@ -1,16 +1,21 @@
-<div class="login-container">
-    <h2>Login</h2>
-    <form (ngSubmit)="onSubmit()" loginForm = "ngForm">
-        <div>
-            <label for="vorname">Vorname:</label>
-            <input type="text" id="vorname" name="vorname" [(ngModel)]="vorname" required />
+<div class="login-container" class="min-h-screen flex items-center justify-center">
+    <form (ngSubmit)="onSubmit()" #loginForm = "ngForm">
+        <div class="text-center text-gray-800 border-2 border-blue-900 rounded-md w-150 grid ">
+            <div class="p-8">
+                <img src="Bildmarke_Schriftzug.jpg">
+                <h1 class="text-5xl">Fuhrpark</h1>
+            </div>
+        <div class="pb-5">
+            <label for="vorname">Vorname: </label>
+            <input type="text" id="vorname" name="vorname" [(ngModel)]="vorname" required class="border border-blue-900 rounded-md h-7 w-35"/>
         </div>
-
-        <div>
-            <label for="nachname">Nachname:</label>
-            <input type="text" id="nachname" name="nachname" [(ngModel)]="nachname" required />
+        <div class="pb-5">
+            <label for="nachname">Nachname: </label>
+            <input type="text" id="nachname" name="nachname" [(ngModel)]="nachname" required class="border border-blue-900 rounded-md h-7 w-32" />
         </div>
-
-        <button type="submit" [disabled]="!loginForm.form.valid">Login</button>
+        <div class=" p-5">
+            <button type="submit" [disabled]="!loginForm.form.valid" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Anmelden</button>
+        </div>
+        </div>
     </form>
 </div>

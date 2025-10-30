@@ -7,20 +7,23 @@ import { App } from './app';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserForm } from './user-form/user-form';
 import { AdminForm } from './admin-form/admin-form';
-import { StatrSeite } from './start-seite/start-seite';
+import { StartSeite } from './start-seite/start-seite';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     App,
     UserForm,
     AdminForm,
-    StatrSeite
+    StartSeite
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
