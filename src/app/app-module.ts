@@ -19,12 +19,11 @@ import { Login } from '../login';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
+    
   ],
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
     provideClientHydration(withEventReplay())
   ],
   bootstrap: [App]

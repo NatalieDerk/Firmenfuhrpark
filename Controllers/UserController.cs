@@ -32,9 +32,9 @@ namespace Backend.Controllers
         }
 
         [HttpGet("byname")]
-        public async Task<ActionResult<User>> GetUserByName([FromQuery] string vorname, [FromQuery] string nachname)
+        public async Task<ActionResult<User>> GetUserByName([FromQuery] string Vorname, [FromQuery] string Nachname)
         {
-            var user = await _context.Users.Include(u => u.Rolle).FirstOrDefaultAsync(u => u.vorname && u.Nachname == nachname );
+            var user = await _context.Users.Include(u => u.Rolle).FirstOrDefaultAsync(u => u.Vorname == Vorname && u.Nachname == Nachname );
             if (user == null)
             {
                 return NotFound();
