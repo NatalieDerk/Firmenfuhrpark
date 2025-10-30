@@ -7,22 +7,23 @@ import { App } from './app';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserForm } from './user-form/user-form';
 import { AdminForm } from './admin-form/admin-form';
+import { Login } from '../login';
 
 @NgModule({
   declarations: [
     App,
+    Login,
     UserForm,
-    AdminForm
+    AdminForm,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
+    
   ],
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
     provideClientHydration(withEventReplay())
   ],
   bootstrap: [App]
