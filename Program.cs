@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
-using Backend.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
