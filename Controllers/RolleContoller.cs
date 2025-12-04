@@ -79,5 +79,26 @@ namespace Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("user/{id}")]
+        public async Task<ActionResult<object>> GetUserWihtRole(int id)
+        {
+            var user = await _context.Users
+            .Include(u => u.Rolle)
+            .FirstOrDefaultAsync(u => u.IdUser == id);
+
+            if (user == null)
+            return NotFound();
+
+            return new
+            {
+                user.IdUser,
+                user.Vorname,
+                user.Nachname,
+                RoleId = user.IdRolle,
+                RoleName = user.Rolle.Name
+            };
+         }
+
     }
 }

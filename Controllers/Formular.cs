@@ -90,5 +90,52 @@ namespace Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<Formular>>> GetPending()
+        {
+            var pending = await _context.Formular
+            .Include(f => f.User)
+            .Where(f => f.Status == null || f.Status == "" || f.Status == "pending")
+            .ToListAsync();
+            return Ok(pending);
+        }
+
+        [HttpPut("approve/{id}")]
+        public async Task<IActionResult> ApproveForm(
+            int id,
+            [FromQuery] int idCar,
+            [FromQuery] int idManager,
+            [FromQuery] string status
+        )
+        {
+           var form = await _context.Formular.FindAsync(id);
+           if (form == null)
+                return NotFound();
+
+            form.IdCar = idCar;
+            form.IdManager = idManager;
+            form.Status = status;
+
+            await _context.SaveChangesAsync();
+            return Ok(form);
+        }
+
+        [HttpPut("reject/{id}")]
+        public async Task<IActionResult> RejectForm(
+            int id,
+            [FromQuery] int idManager
+        )
+        {
+            var form = await _context.Formular.FindAsync(id);
+            if (form == null)
+                return NotFound();
+
+            form.Status = "stornieren";
+            form.IdManager = idManager;
+
+            await _context.SaveChangesAsync();
+            return Ok(form);
+        }
     }
 }
