@@ -1,0 +1,50 @@
+<div class="min-h-screen p-8 bg-gray-100">
+    <div class="text-center">
+        <img src="Bildmarke_Schriftzug.jpg" class="mx-auto w-100 h-auto pb-5">
+        <h1 class="text-5xl font-bold mb-6 text-center">Fuhrpark</h1>
+    </div>
+    
+    <table class="min-w-full border border-gray-300 bg-white shadow-md rounded-md overflow-hidden">
+        <thead class="bg-blue-900 text-white">
+            <tr>
+                <th class="px-4 py-2">Fahrzeuge</th>
+                <th class="px-4 py-2">Datum</th>
+                <th class="px-4 py-2">Zeit</th>
+                <th class="px-4 py-2">Gebucht von</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Grund</th>
+                <th class="px-4 py-2">Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let booking of bookings" class="text-center border-t border-blue-900">
+                <td class="px-4 py-2">
+                    <select class="border border-blue-900 rounded-md px-2 py-1" [(ngModel)]="selectedFahrzeuge[booking.idForm]">
+                        <option value="">auswählen</option>
+                        <option *ngFor="let car of cars" [value]="car.idCar">
+                            {{car.modell}}
+                        </option>
+                    </select>
+                </td>
+                <td class="px-4 py-2">{{booking.startdatum}}
+                    <br>{{booking.enddatum}}
+                </td>
+                <td class="px-4 py-2">{{booking.startZeit}} - {{booking.endZeit}}
+                </td>
+                <td class="px-4 py-2">{{booking.user?.vorname}} {{booking.user?.nachname}}
+                </td>
+                <td class="px-4 py-2">
+                    <select [(ngModel)] = "booking.status" class="border border-blue-900 rounded-md px-2 py-1">
+                        <option value="bestätigen">bestätigen</option>
+                        <option value="stornieren">stornieren</option>
+                    </select>
+                </td>
+                <td class="px-4 py-2">{{booking.grundDerBuchung}}</td>
+                <td class="px-4 py-2">
+                    <button (click) = "approveBooking(booking.idForm)" class="bg-green-600 text-white px-2 py-1 rounded-md">Ok</button>
+                    <button (click) = "rejectBooking(booking.idForm)" class="bg-red-600 text-white px-2 py-1">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
