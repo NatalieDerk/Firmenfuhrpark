@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
-using Backend.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +33,6 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDBContext>();
-    DbDataInit.DataInint(context);
 }
 app.MapControllers();
 app.Run();

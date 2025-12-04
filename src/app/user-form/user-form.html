@@ -1,4 +1,5 @@
 <div class="min-h-screen flex items-center justify-center">
+  <form (ngSubmit) = "onSubmit()" #userForm = "ngForm">
     <div class="text-center text-gray-800 border-2 border-blue-900 rounded-md w-150 grid ">
         <div class="p-8">
                 <img src="Bildmarke_Schriftzug.jpg" alt="Logo">
@@ -94,4 +95,5 @@
           <button type="submit" [disabled] = "!userForm.form.valid" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Buchung anfragen</button>
         </div>
     </div>   
+  </form>
 </div>

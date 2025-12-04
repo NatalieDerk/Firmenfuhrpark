@@ -9,11 +9,14 @@ namespace Backend.Controllers
     public class FormularController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
+
+        // Konstrurtor: Datenbankkontext wird über Dependecy Injection bereitgestellt
         public FormularController(ApplicationDBContext context)
         {
             _context = context;
         }
 
+        // Liefert alle Formular-Einträge inklusive verbundere Tabellen
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Formular>>> GetFormular()
         {
@@ -25,6 +28,7 @@ namespace Backend.Controllers
             .ToListAsync();
         }
 
+        // Liefert ein einzeles Formular-Objekt anhand der Id mit allen Navigationseingenschaften
         [HttpGet("{id}")]
         public async Task<ActionResult<Formular>> GetFormular(int id)
         {
@@ -42,14 +46,31 @@ namespace Backend.Controllers
             return Ok(formular);
         }
 
+        // Erstellt einen neuen Formulareintrag und Konvertiert Zeitangaben (string) in TimeSpan
         [HttpPost]
         public async Task<ActionResult<Formular>> PostFormular(Formular form)
         {
+            try
+            {
+                if (!string.IsNullOrEmpty(form.StartZeitStr))
+                    form.StartZeit = TimeSpan.Parse(form.StartZeit);
+
+                if (!string.IsNullOrEmpty(form.EndZeitStr))
+                    form.EndZeit = TimeSpan.Parse(form.EndZeit);
+           
             _context.Formular.Add(form);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
+            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form); 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, ex.Message);
+            }
+            
         }
 
+        // Aktualisiert einen existierenden Formulareintrag. Prüft, ob die Id übereinstimmt
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFormular(int id, Formular form)
         {
@@ -77,6 +98,7 @@ namespace Backend.Controllers
             return NoContent();
         }
         
+        // Löscht ein Formular anhand der Id
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFormular(int id)
         {
