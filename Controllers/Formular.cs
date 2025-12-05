@@ -52,12 +52,17 @@ namespace Backend.Controllers
         {
             try
             {
-                if (!string.IsNullOrEmpty(form.StartZeitStr))
-                    form.StartZeit = TimeSpan.Parse(form.StartZeit);
+                form.Startdatum = DateTime.SpecifyKind(form.Startdatum, DateTimeKind.Utc);
+                form.Enddatum = DateTime.SpecifyKind(form.Enddatum, DateTimeKind.Utc);
 
-                if (!string.IsNullOrEmpty(form.EndZeitStr))
-                    form.EndZeit = TimeSpan.Parse(form.EndZeit);
+
+                if (form.StartZeitStr.HasValue)
+                    form.StartZeit = TimeSpan.Parse(form.StartZeit.ToString());
+
+                if (form.EndZeitStr.HasValue)
+                    form.EndZeit = TimeSpan.Parse(form.EndZeit.ToString());
            
+            Console.WriteLine("Received form:" + Newtonsoft.Json.JsonConvert.SerializeObject(form));
             _context.Formular.Add(form);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form); 

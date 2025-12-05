@@ -1,7 +1,6 @@
 import { NgModule, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +24,6 @@ import { CommonModule } from '@angular/common';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule,
     HttpClientModule,
     FormsModule,
     CommonModule

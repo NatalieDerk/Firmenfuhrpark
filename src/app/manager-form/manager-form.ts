@@ -1,7 +1,5 @@
-import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { Fahrzeuge } from './fahrzeuge.model';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { throwError } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
 interface Booking {
@@ -35,7 +33,7 @@ export class ManagerForm implements OnInit {
   cars: any[] = [];
 
   // Id des aktuell eingeloggten Managers
-  currentManagerId = JSON.parse(localStorage.getItem('user') || '{}')?.idUser;
+  currentManagerId: number | null = null;
 
   // Ausgewähltes Fahrzeug pro Formular
   selectedFahrzeuge: {[key: number]: number[]} = {};

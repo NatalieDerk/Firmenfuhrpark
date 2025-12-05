@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class UserForm {
 
   // Steuert, ob eine Einzelbuchung oder eine Serienbuchung gewählt wurde
-  serienbuchung: "true" | "false" | "" = "";
+  serienbuchung: boolean | null = null;
 
   user = {
     serienbuchung: null as boolean | null,
@@ -47,16 +47,36 @@ export class UserForm {
       return `${h}:${m}:00`;
     };
 
+    const startDate = new Date(this.user.serienbuchung ? this.user.startDate : this.user.date);
+    const endDate = new Date(this.user.serienbuchung ? this.user.endDate : this.user.date);
+
+    const startDateUTC = new Date(Date.UTC(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate(),
+      startDate.getHours(),
+      startDate.getMinutes(),
+      0
+    ));
+
+    const endDateUTC = new Date(Date.UTC(
+      endDate.getFullYear(),
+      endDate.getMonth(),
+      endDate.getDate(),
+      endDate.getHours(),
+      endDate.getMinutes(),
+      0
+    ));
     // Zumannenstellen der Formulardaten für das Backend
     const payload = {
       IdUser: currentUser.idUser,
-      IdManager: 0,
-      IdCar: 0,
+      IdManager: null,
+      IdCar: null,
       IdOrt: parseInt(this.user.standort),
 
       // Datum abhöngig von Einzel- oder Serienbuchung
-      Startdatum: this.user.serienbuchung ? this.user.startDate : this.user.date,
-      Enddatum: this.user.serienbuchung ? this.user.endDate : this.user.date,
+      Startdatum: startDateUTC.toISOString(),
+      Enddatum: endDateUTC.toISOString(),
 
       // Uhrzeit als String übergaben
       StartZeit: this.user.serienbuchung ? convertTime(this.user.serienTimeFrom) : convertTime(this.user.timeFrom),
@@ -90,6 +110,5 @@ export class UserForm {
       tag: "",
       grund: "",
     };
-    this.serienbuchung = "";
   }
 }
