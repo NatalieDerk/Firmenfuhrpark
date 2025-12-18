@@ -1,33 +1,57 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
+using Backend.Dtos;
 
 namespace Backend.Controllers
 {
-    // Controller zur Verwaltung der Buchungsformulare
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    
     public class FormularController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
+
+        // Konstrurtor: Datenbankkontext wird über Dependecy Injection bereitgestellt
         public FormularController(ApplicationDBContext context)
         {
             _context = context;
         }
 
-        // Gibt alle Buchungen inklusive zugehöriger Benutzer-, Manager-, Fahrzeug- und Standortinformationen zurück
+        // Liefert alle Formular-Einträge inklusive verbundere Tabellen
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Formular>>> GetFormular()
+        public async Task<ActionResult<IEnumerable<object>>> GetFormular()
         {
-            return await _context.Formular
+            var data = await _context.Formular
             .Include(f => f.User)
             .Include(f => f.Manager)
             .Include(f => f.Fahrzeuge)
             .Include(f => f.Standort)
             .ToListAsync();
+
+            var result = data.Select(f => new
+            {
+                f.IdForm,
+                f.IdUser,
+                f.IdManager,
+                f.IdCar,
+                f.IdOrt,
+                startdatum = f.Startdatum.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                enddatum = f.Enddatum.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                startZeit = f.StartZeit.HasValue ? f.StartZeit.Value.ToString(@"hh\:mm\:ss") : null,
+                endZeit = f.EndZeit.HasValue ? f.EndZeit.Value.ToString(@"hh\:mm\:ss") : null,
+                f.Status,
+                f.GrundDerBuchung,
+                user = f.User !=null ? new {f.User.Vorname, f.User.Nachname} : null,
+                manager = f.Manager !=null ? new {f.Manager.Vorname, f.Manager.Nachname} : null,
+                fahrzeuge = f.Fahrzeuge !=null ? new {f.Fahrzeuge.Marke, f.Fahrzeuge.Kennzeichnung} : null,
+                standort = f.Standort !=null ? new {f.Standort.IdOrt, f.Standort.Ort} : null
+            });
+
+            return Ok(result);
         }
 
-        // Gibt eine einzelne Buchung anhand der Formular-ID zurück
+        // Liefert ein einzeles Formular-Objekt anhand der Id mit allen Navigationseingenschaften
         [HttpGet("{id}")]
         public async Task<ActionResult<Formular>> GetFormular(int id)
         {
@@ -42,47 +66,73 @@ namespace Backend.Controllers
             {
                 return NotFound();
             }
+
             return Ok(formular);
         }
 
-        // Erstellt eine neue Fahrzeugbuchung
+        // Erstellt einen neuen Formulareintrag und Konvertiert Zeitangaben (string) in TimeSpan
         [HttpPost]
-        public async Task<ActionResult<Formular>> PostFormular(Formular form)
+        public async Task<ActionResult> PostFormular([FromBody] CreateFormular create)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            TimeSpan? startTime = null;
+            TimeSpan? endTime = null;
+
+            if (!string.IsNullOrEmpty(create.StartZeit))
+            {
+                startTime = TimeSpan.TryParse(create.StartZeit, out var st) ? st : null;
+            }
+
+            if (!string.IsNullOrEmpty(create.EndZeit))
+            {
+                endTime = TimeSpan.TryParse(create.EndZeit, out var st) ? st : null;
+            }
+
+            var form = new Formular
+            {
+                IdUser = create.IdUser,
+                IdOrt = create.IdOrt,
+
+                Startdatum = DateTime.Parse(create.Startdatum),
+                Enddatum = DateTime.Parse(create.Enddatum),
+
+                StartZeit = startTime,
+                EndZeit = endTime,
+
+                Status = create.Status,
+                GrundDerBuchung = create.GrundDerBuchung,
+                IdCar = null
+            };
+
             _context.Formular.Add(form);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
+
+            return Ok(form);
         }
 
-        // Aktualisiert eine bestehende Buchung
+        // Aktualisiert einen existierenden Formulareintrag. Prüft, ob die Id übereinstimmt
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFormular(int id, Formular form)
+        public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBooking update)
         {
-            if (id != form.IdForm)
+           var form = await _context.Formular.FindAsync(id);
+           if (form == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            _context.Entry(form).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Formular.Any(f => f.IdForm == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
+            form.IdCar = update.IdCar;
+            form.IdManager = update.IdManager ?? 0;
+            form.Status = update.Status;
+
+            await _context.SaveChangesAsync();
+            return Ok(form);
         }
         
-        // Löscht eine Buchung aus der Datenbank
+        // Löscht ein Formular anhand der Id
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFormular(int id)
         {
@@ -94,57 +144,7 @@ namespace Backend.Controllers
             _context.Formular.Remove(form);
             await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
-
-        // Gibt alle offenen bzw. noch nicht bearbeiteten Buchungen zurück
-        [HttpGet("pending")]
-        public async Task<ActionResult<IEnumerable<Formular>>> GetPending()
-        {
-            var pending = await _context.Formular
-            .Include(f => f.User)
-            .Where(f => f.Status == null || f.Status == "" || f.Status == "pending")
-            .ToListAsync();
-            return Ok(pending);
-        }
-
-        // Genehmigt eine Buchung durch den Manager und weist ein Fahrzeug zu
-        [HttpPut("approve/{id}")]
-        public async Task<IActionResult> ApproveForm(
-            int id,
-            [FromQuery] int idCar,
-            [FromQuery] int idManager,
-            [FromQuery] string status
-        )
-        {
-           var form = await _context.Formular.FindAsync(id);
-           if (form == null)
-                return NotFound();
-
-            form.IdCar = idCar;
-            form.IdManager = idManager;
-            form.Status = status;
-
-            await _context.SaveChangesAsync();
-            return Ok(form);
-        }
-
-        // Lehnt eine Buchung ab und setzt den Status auf "storniert"
-        [HttpPut("reject/{id}")]
-        public async Task<IActionResult> RejectForm(
-            int id,
-            [FromQuery] int idManager
-        )
-        {
-            var form = await _context.Formular.FindAsync(id);
-            if (form == null)
-                return NotFound();
-
-            form.Status = "stornieren";
-            form.IdManager = idManager;
-
-            await _context.SaveChangesAsync();
-            return Ok(form);
+            return Ok();
         }
     }
 }

@@ -4,7 +4,6 @@ using Backend.Db_tables;
 
 namespace Backend.Controllers
 {
-    // Controller zur Verwaltung von Standorte
     [Route("api/[controller]")]
     [ApiController]
     public class StandortController : ControllerBase
@@ -15,14 +14,15 @@ namespace Backend.Controllers
             _context = context;
         }
 
-        // Liefert eine Liste aller verfügbaren Standorte
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Standort>>> GetStandort()
+        public async Task<ActionResult<IEnumerable<object>>> GetStandort()
         {
-            return await _context.Standorte.ToListAsync();
+            var standort = await _context.Standorte
+                .Select(s => new {s.IdOrt, s.Ort})
+                .ToListAsync();
+            return Ok(standort);
         }
 
-        // Liefert einen einzelnen Standort anhand der Standort-ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Standort>> GetStandort(int id)
         {
@@ -34,7 +34,6 @@ namespace Backend.Controllers
             return ort;
         }
 
-        // Erstellt einen neuen Standort
         [HttpPost]
         public async Task<ActionResult<Standort>> PostStandort(Standort ort)
         {
@@ -43,7 +42,6 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetStandort), new { id = ort.IdOrt }, ort);
         }
 
-        // Aktualisiert einen bestehenden Standort
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStandort(int id, Standort ort)
         {
@@ -71,7 +69,6 @@ namespace Backend.Controllers
             return NoContent();
         }
         
-        // Löscht einen Standort aus dem System
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStandort(int id)
         {

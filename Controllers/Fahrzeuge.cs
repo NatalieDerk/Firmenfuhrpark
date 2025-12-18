@@ -16,10 +16,12 @@ namespace Backend.Controllers
         }
 
         // Gibt eine Liste aller Fahrzeuge inklusive Standortinformationen zurück
-        [HttpGet]
+       [HttpGet]
         public async Task<ActionResult<IEnumerable<Fahrzeuge>>> GetFahrzeuge()
         {
-            return await _context.Fahrzeuge.Include(f => f.Standort).ToListAsync();
+            return await _context.Fahrzeuge
+                .Include(f => f.Standort)
+                .ToListAsync();
         }
 
         // Gibt ein einzelnes Fahrzeug anhand der ID zurück
@@ -44,7 +46,7 @@ namespace Backend.Controllers
         }
 
         // Aktualisiert ein bestehendes Fahrzeug
-        [HttpPut("{id}")]
+       [HttpPut("{id}")]
         public async Task<IActionResult> PutFahrzeuge(int id, Fahrzeuge car)
         {
             if (id != car.IdCar)
@@ -53,21 +55,7 @@ namespace Backend.Controllers
             }
             _context.Entry(car).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Fahrzeuge.Any(f => f.IdCar == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
             return NoContent();
         }
         
