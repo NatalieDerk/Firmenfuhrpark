@@ -4,6 +4,7 @@ using Backend.Db_tables;
 
 namespace Backend.Controllers
 {
+    // Controller zur Verwaltung der Buchungsformulare
     [Route("api/[controller]")]
     [ApiController]
     public class FormularController : ControllerBase
@@ -14,6 +15,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Gibt alle Buchungen inklusive zugehöriger Benutzer-, Manager-, Fahrzeug- und Standortinformationen zurück
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Formular>>> GetFormular()
         {
@@ -25,6 +27,7 @@ namespace Backend.Controllers
             .ToListAsync();
         }
 
+        // Gibt eine einzelne Buchung anhand der Formular-ID zurück
         [HttpGet("{id}")]
         public async Task<ActionResult<Formular>> GetFormular(int id)
         {
@@ -42,6 +45,7 @@ namespace Backend.Controllers
             return Ok(formular);
         }
 
+        // Erstellt eine neue Fahrzeugbuchung
         [HttpPost]
         public async Task<ActionResult<Formular>> PostFormular(Formular form)
         {
@@ -50,6 +54,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
         }
 
+        // Aktualisiert eine bestehende Buchung
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFormular(int id, Formular form)
         {
@@ -77,6 +82,7 @@ namespace Backend.Controllers
             return NoContent();
         }
         
+        // Löscht eine Buchung aus der Datenbank
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFormular(int id)
         {
@@ -91,6 +97,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        // Gibt alle offenen bzw. noch nicht bearbeiteten Buchungen zurück
         [HttpGet("pending")]
         public async Task<ActionResult<IEnumerable<Formular>>> GetPending()
         {
@@ -101,6 +108,7 @@ namespace Backend.Controllers
             return Ok(pending);
         }
 
+        // Genehmigt eine Buchung durch den Manager und weist ein Fahrzeug zu
         [HttpPut("approve/{id}")]
         public async Task<IActionResult> ApproveForm(
             int id,
@@ -121,6 +129,7 @@ namespace Backend.Controllers
             return Ok(form);
         }
 
+        // Lehnt eine Buchung ab und setzt den Status auf "storniert"
         [HttpPut("reject/{id}")]
         public async Task<IActionResult> RejectForm(
             int id,

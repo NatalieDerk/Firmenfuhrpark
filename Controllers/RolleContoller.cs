@@ -4,6 +4,7 @@ using Backend.Db_tables;
 
 namespace Backend.Controllers
 {
+    // Controller zur Verwaltung von Benutzerrollen
     [Route("api/[controller]")]
     [ApiController]
     public class RolleController : ControllerBase
@@ -14,12 +15,14 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Gibt alle im System vorhandenen Rollen zurück
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rolle>>> GetRolle()
         {
             return await _context.Rollen.ToListAsync();
         }
 
+        // Gibt eine einzelne Rolle anhand der Rollen-ID zurück
         [HttpGet("{id}")]
         public async Task<ActionResult<Rolle>> GetRolle(int id)
         {
@@ -31,6 +34,7 @@ namespace Backend.Controllers
             return rolle;
         }
 
+        // Erstellt eine neue Benutzerrolle
         [HttpPost]
         public async Task<ActionResult<Rolle>> PostUser(Rolle rolle)
         {
@@ -39,6 +43,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetRolle), new { id = rolle.IdRolle }, rolle);
         }
 
+        // Aktuallisiert eine bestehende Rolle
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRolle(int id, Rolle rolle)
         {
@@ -66,6 +71,7 @@ namespace Backend.Controllers
             return NoContent();
         }
         
+        // Löscht eine Rolle aus dem System
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRolle(int id)
         {
@@ -80,6 +86,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        // Gibt einen Benutzer inklusive zugehöriger Rolleninformationen zurück
         [HttpGet("user/{id}")]
         public async Task<ActionResult<object>> GetUserWihtRole(int id)
         {
@@ -88,8 +95,10 @@ namespace Backend.Controllers
             .FirstOrDefaultAsync(u => u.IdUser == id);
 
             if (user == null)
-            return NotFound();
-
+            {
+                return NotFound();
+            }
+            
             return new
             {
                 user.IdUser,
@@ -99,6 +108,5 @@ namespace Backend.Controllers
                 RoleName = user.Rolle.Name
             };
          }
-
     }
 }

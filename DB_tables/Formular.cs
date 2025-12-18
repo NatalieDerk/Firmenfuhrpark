@@ -8,7 +8,7 @@ namespace Backend.Db_tables
     public int IdForm { get; set; }
     public int IdUser { get; set; }
     public int IdManager { get; set; }
-    public int IdCar { get; set; }
+    public int? IdCar { get; set; }
     public int IdOrt { get; set; }
     public DateTime Startdatum { get; set; }
     public DateTime Enddatum { get; set; }

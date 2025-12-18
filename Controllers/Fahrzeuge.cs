@@ -4,6 +4,7 @@ using Backend.Db_tables;
 
 namespace Backend.Controllers
 {
+    // Controller zur Vervaltung der Fahrzuege
     [Route("api/[controller]")]
     [ApiController]
     public class FahrzeugeController : ControllerBase
@@ -14,12 +15,14 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Gibt eine Liste aller Fahrzeuge inklusive Standortinformationen zurück
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Fahrzeuge>>> GetFahrzeuge()
         {
             return await _context.Fahrzeuge.Include(f => f.Standort).ToListAsync();
         }
 
+        // Gibt ein einzelnes Fahrzeug anhand der ID zurück
         [HttpGet("{id}")]
         public async Task<ActionResult<Fahrzeuge>> GetFahrzeuge(int id)
         {
@@ -31,6 +34,7 @@ namespace Backend.Controllers
             return Ok(car);
         }
 
+        // Legt ein neues Fahrzeug in der Datenbank an
         [HttpPost]
         public async Task<ActionResult<Fahrzeuge>> PostFahrzeuge(Fahrzeuge car)
         {
@@ -39,6 +43,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetFahrzeuge), new { id = car.IdCar }, car);
         }
 
+        // Aktualisiert ein bestehendes Fahrzeug
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFahrzeuge(int id, Fahrzeuge car)
         {
@@ -66,6 +71,7 @@ namespace Backend.Controllers
             return NoContent();
         }
         
+        // Löscht ein Fahrzeug aus der Datenbank
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFahrzeuge(int id)
         {

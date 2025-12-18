@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
 
+// Controller zur Verwaltung der Benutzer im System
 namespace Backend.Controllers
 {
+    // Benutzer sind Mitarbeitern zugeordnet und besitzen unterschidliche Rollen
     [Route("api/[controller]")]
     [ApiController]
     public class UserController: ControllerBase
@@ -14,12 +16,14 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Liefert eine Liste aller Benuzter inklusive ihrer Rollen
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.Include(u => u.Rolle).ToListAsync();
         }
 
+        // Liefert einen einzelnen Benutzer anhand der Benutzer-ID
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -31,6 +35,7 @@ namespace Backend.Controllers
             return user;
         }
 
+        // Liefert einen Benutzer anhand von Vor- und Nachnamen
         [HttpGet("byname")]
         public async Task<ActionResult<User>> GetUserByName([FromQuery] string Vorname, [FromQuery] string Nachname)
         {
@@ -42,6 +47,7 @@ namespace Backend.Controllers
             return user;
         }
 
+        // Erstellt einen neuen Benutzer im System
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -50,6 +56,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.IdUser }, user);
         }
 
+        // Aktualisiert die Daten eines bestehenden Benutzers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -77,6 +84,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        // Löscht einen Benutzer aus dem System
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
