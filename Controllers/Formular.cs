@@ -74,6 +74,7 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> PostFormular([FromBody] CreateFormular create)
         {
+<<<<<<< HEAD
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -112,6 +113,31 @@ namespace Backend.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(form);
+=======
+            try
+            {
+                form.Startdatum = DateTime.SpecifyKind(form.Startdatum, DateTimeKind.Utc);
+                form.Enddatum = DateTime.SpecifyKind(form.Enddatum, DateTimeKind.Utc);
+
+
+                if (form.StartZeitStr.HasValue)
+                    form.StartZeit = TimeSpan.Parse(form.StartZeit.ToString());
+
+                if (form.EndZeitStr.HasValue)
+                    form.EndZeit = TimeSpan.Parse(form.EndZeit.ToString());
+           
+            Console.WriteLine("Received form:" + Newtonsoft.Json.JsonConvert.SerializeObject(form));
+            _context.Formular.Add(form);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form); 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, ex.Message);
+            }
+            
+>>>>>>> 1029d18d8e03322f5bdb506253564d3c1c2bb079
         }
 
         // Aktualisiert einen existierenden Formulareintrag. Prüft, ob die Id übereinstimmt

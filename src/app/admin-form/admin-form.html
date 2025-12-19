@@ -1,1 +1,60 @@
-<p>admin-form works!</p>
+<div class="min-h-screen flex items-center justify-center">
+  <div class="text-center text-gray-800 border-2 border-blue-900 rounded-md w-150 grid">
+ 
+    <!-- Benutzerverwaltung -->
+    <section>
+      <div class="p-8">
+        <img src="Bildmarke_Schriftzug.jpg" alt="Logo">
+        <h2 class="text-4xl m-3">Benutzerverwaltung</h2>
+      </div>
+      <form #userForm="ngForm" (ngSubmit)="addUser(userForm)">
+        <input type="text" name="vorname" [(ngModel)]="newUser.vorname" placeholder="Vorname" required class="border border-blue-900 rounded-md m-2">
+        <input type="text" name="nachname" [(ngModel)]="newUser.nachname" placeholder="Nachname" required class="border border-blue-900 rounded-md m-2">
+        <select name="rolle" [(ngModel)]="newUser.rolle" required class="border border-blue-900 rounded-md">
+          <option value="Benutzer">Benutzer</option>
+          <option value="Manager">Manager</option>
+          <option value="Administrator">Administrator</option>
+        </select>
+        <div class="p-8">
+            <button type="submit" [disabled]="!userForm.form.valid" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Hinzufügen</button>
+        </div>
+      </form>
+      <ul>
+        <li *ngFor="let u of users">
+          <span>{{u.vorname}} {{u.nachname}} ({{u.rolle?.Name}})</span>
+        <div class="p-8">
+            <button (click)="deleteUser(u.IdUser)" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Löschen</button>
+        </div>
+          
+        </li>
+      </ul>
+    </section>
+ 
+    <!-- Fahrzeugverwaltung -->
+    <section>
+      <div class="p-8">
+        <h2 class="text-4xl">Fahrzeugverwaltung</h2>
+      </div>
+      <form #carForm="ngForm" (ngSubmit)="addCar(carForm)">
+        <input type="text" name="standort" [(ngModel)]="newCar.standort.Ort" placeholder="Standort" required class="border border-blue-900 rounded-md m-2">
+        <input type="text" name="marke" [(ngModel)]="newCar.marke" placeholder="Marke" required class="border border-blue-900 rounded-md m-2">
+        <input type="text" name="datumVonKauf" [(ngModel)]="newCar.datumVonKauf" placeholder="DatumVonKauf" required class="border border-blue-900 rounded-md m-2">
+        <input type="text" name="farbe" [(ngModel)]="newCar.farbe" placeholder="Farbe" required class="border border-blue-900 rounded-md m-2">
+        <input type="text" name="typ" [(ngModel)]="newCar.typ" placeholder="Typ" required class="border border-blue-900 rounded-md m-2">
+        <input type="text" name="kennzeichen" [(ngModel)]="newCar.kennzeichen" placeholder="Kennzeichen" required class="border border-blue-900 rounded-md">
+        <div class="p-8">
+            <button type="submit" [disabled]="!carForm.form.valid" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Hinzufügen</button>
+        </div>
+      </form>
+      <ul>
+        <li *ngFor="let c of cars">
+          <span>{{c.standort?.Ort}} - {{c.typ}} - {{c.kennzeichen}} - {{c.marke}}</span>
+          <div class="p-8">
+            <button (click)="deleteCar(c.IdCar)" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Löschen</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+ 
+  </div>
+</div>

@@ -1,0 +1,131 @@
+import { Component } from '@angular/core';
+import { tick } from '@angular/core/testing';
+
+@Component({
+  selector: 'app-user-form',
+  standalone: false,
+  styleUrl: './user-form.css',
+  template: 
+`<div class="min-h-screen flex items-center justify-center">
+  <form (ngSubmit) = "onSubmit()" #userForm = "ngForm">
+    <div class="text-center text-gray-800 border-2 border-blue-900 rounded-md w-150 grid ">
+        <div class="p-8">
+           <h1 class="text-5xl">Autobuchungssystem</h1>
+        </div>
+        <div class="pb-5">
+          <h2 class="font-semibold">Serienbuchung: </h2>
+            <label>
+              <input type="radio" name="serienbuchung" [(ngModel)]="user.serienbuchung" [value]="true" />
+              ja
+            </label>
+            <label>
+              <input type="radio" name="serienbuchung" [(ngModel)]="user.serienbuchung" [value]="false" />
+              nein
+            </label>
+        </div>
+
+        <!-- Wenn Serienbuchung = false -->
+        <div *ngIf="user.serienbuchung === false">
+          <div class="font-semibold pb-5">
+              <label>Datum: </label>
+              <input type="date" name="date"[(ngModel)]= "user.date" required class="border border-blue-900 rounded-md" />  
+          </div>
+          <div class="font-semibold pb-5">
+              <label>Zeit von: </label>
+              <input type="time" name="timeFrom"[(ngModel)]= "user.timeFrom" required class="border border-blue-900 rounded-md"/>
+          </div>
+          <div class="font-semibold pb-5">
+              <label>Zeit bis: </label>
+              <input type="time" name="timeTo"[(ngModel)]= "user.timeTo" required class="border border-blue-900 rounded-md"/>
+          </div>
+          <div class="font-semibold pb-5">
+            <h2>Standort: 
+              <select name="standort" [(ngModel)]= "user.standort" class="border border-blue-900 rounded-md w-30 text-center">
+                <option>Rostock</option>
+                <option>Hamburg</option>
+                <option>Köln</option>
+            </select>
+            </h2>
+          </div>
+          <div class="pb-5">
+              <h2 class="font-semibold ">Grund der Buchung: </h2>
+              <textarea name="grund" [(ngModel)]= "user.grund" class="border border-blue-900 rounded-md h-30 w-50"></textarea>
+          </div>
+        </div>
+
+        <!-- Wenn Serienbuchung = true -->
+        <div *ngIf="user.serienbuchung === true">
+          <div class="font-semibold pb-5">
+              <label>Startdatum: </label>
+              <input type="date" name="startDate"[(ngModel)]= "user.startDate" required class="border border-blue-900 rounded-md"/>
+          </div>
+          <div class="font-semibold pb-5">
+              <label>Enddatum: </label>
+              <input type="date" name="endDate"[(ngModel)]= "user.endDate" required class="border border-blue-900 rounded-md"/>
+          </div>
+          <div class="font-semibold pb-5">
+            <h2>Tag: 
+              <select name="tag" [(ngModel)]= "user.tag" class="border border-blue-900 rounded-md w-30 text-center">
+                <option>Montag</option>
+                <option>Dinstag</option>
+                <option>Mittwoch</option>
+                <option>Donerstag</option>
+                <option>Freitag</option>
+                <option>Samstag</option>
+                <option>Sonntag</option>
+            </select>
+            </h2>
+          </div>
+          <div class="font-semibold pb-5">
+              <label>Zeit von: </label>
+              <input type="time" name="serienTimeFrom"[(ngModel)]= "user.serienTimeFrom" required class="border border-blue-900 rounded-md"/>
+          </div>
+          <div class="font-semibold pb-5">
+              <label>Zeit bis: </label>
+              <input type="time" name="serienTimeTo"[(ngModel)]= "user.serienTimeTo" required class="border border-blue-900 rounded-md"/>
+          </div>
+          <div class="font-semibold pb-5">
+            <h2>Standort: 
+              <select name="standort: " [(ngModel)]= "user.standort" class="border border-blue-900 rounded-md w-30 text-center">
+                <option>Rostock</option>
+                <option>Hamburg</option>
+                <option>Köln</option>
+            </select>
+            </h2>
+          </div>
+          <div class="pb-5">
+              <h2 class="font-semibold ">Grund der Buchung: </h2>
+              <textarea name="grund" [(ngModel)]= "user.grund" class="border border-blue-900 rounded-md h-30 w-50"></textarea>
+          </div>
+        </div>
+        <div class=" p-5">
+          <button type="submit" [disabled] = "!userForm.form.valid" class="border rounded-md bg-blue-900 text-white h-15 w-40 cursor-pointer">Buchung anfragen</button>
+        </div>
+    </div>   
+  </form>
+</div>`
+
+})
+export class UserForm {
+
+  serienbuchung: "true" | "false" | "" = "";
+
+  user = {
+    serienbuchung: null as boolean | null,
+    date: "",
+    timeFrom: "",
+    timeTo: "",
+    startDate: "",
+    endDate: "",
+    serienTimeFrom: "",
+    serienTimeTo: "",
+    standort: "",
+    tag: "",
+    grund: "",
+    
+  };
+
+  onSubmit() {
+    console.log(this.user);
+  }
+}
