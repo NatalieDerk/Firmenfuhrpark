@@ -97,8 +97,8 @@ namespace Backend.Controllers
                 IdUser = create.IdUser,
                 IdOrt = create.IdOrt,
 
-                Startdatum = DateTime.Parse(create.Startdatum),
-                Enddatum = DateTime.Parse(create.Enddatum),
+                Startdatum = create.Startdatum,
+                Enddatum = create.Enddatum,
 
                 StartZeit = startTime,
                 EndZeit = endTime,
@@ -124,8 +124,16 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
-            form.IdCar = update.IdCar;
-            form.IdManager = update.IdManager ?? 0;
+            if (update.IdCar.HasValue)
+            {
+                form.IdCar = update.IdCar;
+            }
+
+            if (update.IdManager.HasValue)
+            {
+                form.IdManager = update.IdManager;
+            }
+
             form.Status = update.Status;
 
             await _context.SaveChangesAsync();

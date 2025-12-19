@@ -241,3 +241,7 @@ C:\Users\DERKNA\Projekt\autobuchung\backend\obj\Debug\net8.0\refint\backend.dll
 C:\Users\DERKNA\Projekt\autobuchung\backend\obj\Debug\net8.0\backend.pdb
 C:\Users\DERKNA\Projekt\autobuchung\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 C:\Users\DERKNA\Projekt\autobuchung\backend\obj\Debug\net8.0\ref\backend.dll
+C:\Users\DERKNA\Projekt\autobuchung\backend\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\DERKNA\Projekt\autobuchung\backend\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\DERKNA\Projekt\autobuchung\backend\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\DERKNA\Projekt\autobuchung\backend\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
