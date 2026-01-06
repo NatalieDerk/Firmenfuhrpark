@@ -2,12 +2,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Db_tables
 {
-    // Stellt die Verbindung zur PostgreSQL-Datenbank her und definiert alle Tabellen sowie deren Beziehungen
     public class ApplicationDBContext : DbContext
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { }
 
-        // Definition der Datenbanktabellen
         public DbSet<Rolle> Rollen { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Standort> Standorte { get; set; }
@@ -16,7 +14,6 @@ namespace Backend.Db_tables
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Definition der Primärschlüssel
             modelBuilder.Entity<Rolle>().HasKey(r => r.IdRolle);
             modelBuilder.Entity<User>().HasKey(u => u.IdUser);
             modelBuilder.Entity<Standort>().HasKey(s => s.IdOrt);

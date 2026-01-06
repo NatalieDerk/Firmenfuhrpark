@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
 {
-    // Controller für die Authentifizierung von Benutzern
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -12,20 +11,17 @@ namespace Backend.Controllers
 
     private readonly ApplicationDBContext _context;
 
-    // Konstruktor zur Übergabe des DbContext über Dependency Injection
     public AuthController(ApplicationDBContext context)
     {
         _context = context;
     }
 
-    // Data Transfer Object (DOT) für Login-Daten
     public class LoginDto
     {
-        public string? Vorname {get; set;}
-        public string? Nachname {get; set;}
+        public string Vorname {get; set;}
+        public string Nachname {get; set;}
     }
 
-    // POST-Endpunkt für die Benutzeranmeldung
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
@@ -34,10 +30,8 @@ namespace Backend.Controllers
             .FirstOrDefaultAsync(u => u.Vorname == login.Vorname && u.Nachname == login.Nachname);
 
             if(user == null)
-            {
-                return Unauthorized("Benutzer nicht gefunden");
-            }
-            
+            return Unauthorized("Benutzer nicht gefunden");
+
             return Ok(new
             {
                 user.IdUser,

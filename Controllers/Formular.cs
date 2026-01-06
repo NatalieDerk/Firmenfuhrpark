@@ -1,57 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
-using Backend.Dtos;
 
 namespace Backend.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    
+    [ApiController]
     public class FormularController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-
-        // Konstrurtor: Datenbankkontext wird über Dependecy Injection bereitgestellt
         public FormularController(ApplicationDBContext context)
         {
             _context = context;
         }
 
-        // Liefert alle Formular-Einträge inklusive verbundere Tabellen
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetFormular()
+        public async Task<ActionResult<IEnumerable<Formular>>> GetFormular()
         {
-            var data = await _context.Formular
+            return await _context.Formular
             .Include(f => f.User)
             .Include(f => f.Manager)
             .Include(f => f.Fahrzeuge)
             .Include(f => f.Standort)
             .ToListAsync();
-
-            var result = data.Select(f => new
-            {
-                f.IdForm,
-                f.IdUser,
-                f.IdManager,
-                f.IdCar,
-                f.IdOrt,
-                startdatum = f.Startdatum.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                enddatum = f.Enddatum.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                startZeit = f.StartZeit.HasValue ? f.StartZeit.Value.ToString(@"hh\:mm\:ss") : null,
-                endZeit = f.EndZeit.HasValue ? f.EndZeit.Value.ToString(@"hh\:mm\:ss") : null,
-                f.Status,
-                f.GrundDerBuchung,
-                user = f.User !=null ? new {f.User.Vorname, f.User.Nachname} : null,
-                manager = f.Manager !=null ? new {f.Manager.Vorname, f.Manager.Nachname} : null,
-                fahrzeuge = f.Fahrzeuge !=null ? new {f.Fahrzeuge.Marke, f.Fahrzeuge.Kennzeichnung} : null,
-                standort = f.Standort !=null ? new {f.Standort.IdOrt, f.Standort.Ort} : null
-            });
-
-            return Ok(result);
         }
 
-        // Liefert ein einzeles Formular-Objekt anhand der Id mit allen Navigationseingenschaften
         [HttpGet("{id}")]
         public async Task<ActionResult<Formular>> GetFormular(int id)
         {
@@ -66,107 +39,44 @@ namespace Backend.Controllers
             {
                 return NotFound();
             }
-
             return Ok(formular);
         }
 
-        // Erstellt einen neuen Formulareintrag und Konvertiert Zeitangaben (string) in TimeSpan
         [HttpPost]
-        public async Task<ActionResult> PostFormular([FromBody] CreateFormular create)
+        public async Task<ActionResult<Formular>> PostFormular(Formular form)
         {
-<<<<<<< HEAD
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            TimeSpan? startTime = null;
-            TimeSpan? endTime = null;
-
-            if (!string.IsNullOrEmpty(create.StartZeit))
-            {
-                startTime = TimeSpan.TryParse(create.StartZeit, out var st) ? st : null;
-            }
-
-            if (!string.IsNullOrEmpty(create.EndZeit))
-            {
-                endTime = TimeSpan.TryParse(create.EndZeit, out var st) ? st : null;
-            }
-
-            var form = new Formular
-            {
-                IdUser = create.IdUser,
-                IdOrt = create.IdOrt,
-
-                Startdatum = create.Startdatum,
-                Enddatum = create.Enddatum,
-
-                StartZeit = startTime,
-                EndZeit = endTime,
-
-                Status = create.Status,
-                GrundDerBuchung = create.GrundDerBuchung,
-                IdCar = null
-            };
-
             _context.Formular.Add(form);
             await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
+        }
 
-            return Ok(form);
-=======
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutFormular(int id, Formular form)
+        {
+            if (id != form.IdForm)
+            {
+                return BadRequest();
+            }
+            _context.Entry(form).State = EntityState.Modified;
+
             try
             {
-                form.Startdatum = DateTime.SpecifyKind(form.Startdatum, DateTimeKind.Utc);
-                form.Enddatum = DateTime.SpecifyKind(form.Enddatum, DateTimeKind.Utc);
-
-
-                if (form.StartZeitStr.HasValue)
-                    form.StartZeit = TimeSpan.Parse(form.StartZeit.ToString());
-
-                if (form.EndZeitStr.HasValue)
-                    form.EndZeit = TimeSpan.Parse(form.EndZeit.ToString());
-           
-            Console.WriteLine("Received form:" + Newtonsoft.Json.JsonConvert.SerializeObject(form));
-            _context.Formular.Add(form);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form); 
+                await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                Console.WriteLine(ex);
-                return StatusCode(500, ex.Message);
+                if (!_context.Formular.Any(f => f.IdForm == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
-            
->>>>>>> 1029d18d8e03322f5bdb506253564d3c1c2bb079
-        }
-
-        // Aktualisiert einen existierenden Formulareintrag. Prüft, ob die Id übereinstimmt
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBooking update)
-        {
-           var form = await _context.Formular.FindAsync(id);
-           if (form == null)
-            {
-                return NotFound();
-            }
-
-            if (update.IdCar.HasValue)
-            {
-                form.IdCar = update.IdCar;
-            }
-
-            if (update.IdManager.HasValue)
-            {
-                form.IdManager = update.IdManager;
-            }
-
-            form.Status = update.Status;
-
-            await _context.SaveChangesAsync();
-            return Ok(form);
+            return NoContent();
         }
         
-        // Löscht ein Formular anhand der Id
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFormular(int id)
         {
@@ -178,7 +88,54 @@ namespace Backend.Controllers
             _context.Formular.Remove(form);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
+        }
+
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<Formular>>> GetPending()
+        {
+            var pending = await _context.Formular
+            .Include(f => f.User)
+            .Where(f => f.Status == null || f.Status == "" || f.Status == "pending")
+            .ToListAsync();
+            return Ok(pending);
+        }
+
+        [HttpPut("approve/{id}")]
+        public async Task<IActionResult> ApproveForm(
+            int id,
+            [FromQuery] int idCar,
+            [FromQuery] int idManager,
+            [FromQuery] string status
+        )
+        {
+           var form = await _context.Formular.FindAsync(id);
+           if (form == null)
+                return NotFound();
+
+            form.IdCar = idCar;
+            form.IdManager = idManager;
+            form.Status = status;
+
+            await _context.SaveChangesAsync();
+            return Ok(form);
+        }
+
+        [HttpPut("reject/{id}")]
+        public async Task<IActionResult> RejectForm(
+            int id,
+            [FromQuery] int idManager
+        )
+        {
+            var form = await _context.Formular.FindAsync(id);
+            if (form == null)
+                return NotFound();
+
+            form.Status = "stornieren";
+            form.IdManager = idManager;
+
+            await _context.SaveChangesAsync();
+            return Ok(form);
         }
     }
 }

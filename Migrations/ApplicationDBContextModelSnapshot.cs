@@ -66,22 +66,19 @@ namespace backend.Migrations
                     b.Property<TimeSpan?>("EndZeit")
                         .HasColumnType("interval");
 
-                    b.Property<string>("EndZeitStr")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("Enddatum")
+                    b.Property<DateTime>("Enddatum")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("GrundDerBuchung")
                         .HasColumnType("text");
 
-                    b.Property<int?>("IdCar")
+                    b.Property<int>("IdCar")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("IdManager")
+                    b.Property<int>("IdManager")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("IdOrt")
+                    b.Property<int>("IdOrt")
                         .HasColumnType("integer");
 
                     b.Property<int>("IdUser")
@@ -93,10 +90,7 @@ namespace backend.Migrations
                     b.Property<TimeSpan?>("StartZeit")
                         .HasColumnType("interval");
 
-                    b.Property<string>("StartZeitStr")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("Startdatum")
+                    b.Property<DateTime>("Startdatum")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
@@ -187,17 +181,20 @@ namespace backend.Migrations
                     b.HasOne("Backend.Db_tables.Fahrzeuge", "Fahrzeuge")
                         .WithMany()
                         .HasForeignKey("IdCar")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Backend.Db_tables.User", "Manager")
                         .WithMany()
                         .HasForeignKey("IdManager")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Backend.Db_tables.Standort", "Standort")
                         .WithMany()
                         .HasForeignKey("IdOrt")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Backend.Db_tables.User", "User")
                         .WithMany()
