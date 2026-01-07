@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
+using Backend.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,8 +26,6 @@ builder.Services.AddControllers() .AddJsonOptions(options =>
 // Swagger-Dinste hinzufügen
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
 
 // Swagger-Middleware aktiviren
 if (app.Environment.IsDevelopment())
