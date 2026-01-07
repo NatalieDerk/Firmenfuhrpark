@@ -41,6 +41,5 @@ export class Login{
             },
             error: () => this.error = "Fehler beim Abrufen des Benutzers"
         })
-    }
-    
+    }  
 }
