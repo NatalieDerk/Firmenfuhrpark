@@ -43,12 +43,46 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Formular>> PostFormular(Formular form)
+public async Task<ActionResult> PostFormular([FromBody] CreateFormular create)
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
+ 
+    try
+    {
+        TimeSpan? startTime = null;
+        TimeSpan? endTime = null;
+ 
+        if (!string.IsNullOrEmpty(create.StartZeit))
+            startTime = TimeSpan.TryParse(create.StartZeit, out var st) ? st : null;
+ 
+        if (!string.IsNullOrEmpty(create.EndZeit))
+            endTime = TimeSpan.TryParse(create.EndZeit, out var et) ? et : null;
+ 
+        var form = new Formular
         {
-            _context.Formular.Add(form);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
-        }
+            IdUser = create.IdUser,
+            IdOrt = create.IdOrt,
+            Startdatum = DateTime.SpecifyKind(create.Startdatum, DateTimeKind.Utc),
+            Enddatum = DateTime.SpecifyKind(create.Enddatum, DateTimeKind.Utc),
+            StartZeit = startTime,
+            EndZeit = endTime,
+            Status = create.Status,
+            GrundDerBuchung = create.GrundDerBuchung,
+            IdCar = null
+        };
+ 
+        _context.Formular.Add(form);
+        await _context.SaveChangesAsync();
+ 
+        return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+        return StatusCode(500, ex.Message);
+    }
+}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFormular(int id, Formular form)
