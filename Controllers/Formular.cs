@@ -1,6 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
+using Backend.Dtos;
+using Backend.Hubs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -9,9 +12,11 @@ namespace Backend.Controllers
     public class FormularController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        public FormularController(ApplicationDBContext context)
+        private readonly IHubContext<BookingHub> _bookingHubContext;
+        public FormularController(ApplicationDBContext context, IHubContext<BookingHub> bookingHubContext)
         {
             _context = context;
+            _bookingHubContext = bookingHubContext;
         }
 
         [HttpGet]
@@ -43,45 +48,45 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-public async Task<ActionResult> PostFormular([FromBody] CreateFormular create)
-{
-    if (!ModelState.IsValid)
-        return BadRequest(ModelState);
- 
-    try
-    {
-        TimeSpan? startTime = null;
-        TimeSpan? endTime = null;
- 
-        if (!string.IsNullOrEmpty(create.StartZeit))
-            startTime = TimeSpan.TryParse(create.StartZeit, out var st) ? st : null;
- 
-        if (!string.IsNullOrEmpty(create.EndZeit))
-            endTime = TimeSpan.TryParse(create.EndZeit, out var et) ? et : null;
- 
-        var form = new Formular
+        public async Task<ActionResult> PostFormular([FromBody] CreateFormular create)
         {
-            IdUser = create.IdUser,
-            IdOrt = create.IdOrt,
-            Startdatum = DateTime.SpecifyKind(create.Startdatum, DateTimeKind.Utc),
-            Enddatum = DateTime.SpecifyKind(create.Enddatum, DateTimeKind.Utc),
-            StartZeit = startTime,
-            EndZeit = endTime,
-            Status = create.Status,
-            GrundDerBuchung = create.GrundDerBuchung,
-            IdCar = null
-        };
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
  
-        _context.Formular.Add(form);
-        await _context.SaveChangesAsync();
- 
-        return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex);
-        return StatusCode(500, ex.Message);
-    }
+            try
+            {
+            TimeSpan? startTime = null;
+            TimeSpan? endTime = null;
+    
+            if (!string.IsNullOrEmpty(create.StartZeit))
+                startTime = TimeSpan.TryParse(create.StartZeit, out var st) ? st : null;
+    
+            if (!string.IsNullOrEmpty(create.EndZeit))
+                endTime = TimeSpan.TryParse(create.EndZeit, out var et) ? et : null;
+    
+            var form = new Formular
+            {
+                IdUser = create.IdUser,
+                IdOrt = create.IdOrt,
+                Startdatum = create.Startdatum,
+                Enddatum = create.Enddatum,
+                StartZeit = startTime,
+                EndZeit = endTime,
+                Status = create.Status,
+                GrundDerBuchung = create.GrundDerBuchung,
+                IdCar = null
+            };
+    
+            _context.Formular.Add(form);
+            await _context.SaveChangesAsync();
+    
+            return CreatedAtAction(nameof(GetFormular), new { id = form.IdForm }, form);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return StatusCode(500, ex.Message);
+        }
 }
 
         [HttpPut("{id}")]

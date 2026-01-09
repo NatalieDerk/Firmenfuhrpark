@@ -7,11 +7,11 @@ namespace Backend.Db_tables
     [Key]
     public int IdForm { get; set; }
     public int IdUser { get; set; }
-    public int IdManager { get; set; }
-    public int IdCar { get; set; }
+    public int? IdManager { get; set; }
+    public int? IdCar { get; set; }
     public int IdOrt { get; set; }
-    public DateTime Startdatum { get; set; }
-    public DateTime Enddatum { get; set; }
+    public DateTimeOffset Startdatum { get; set; }
+    public DateTimeOffset Enddatum { get; set; }
     public TimeSpan? StartZeit { get; set; }
     public TimeSpan? EndZeit { get; set; }
     public string? Status { get; set; }

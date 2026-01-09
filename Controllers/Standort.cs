@@ -15,9 +15,13 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Standort>>> GetStandort()
+        public async Task<ActionResult<IEnumerable<object>>> GetStandort()
         {
-            return await _context.Standorte.ToListAsync();
+           var standorte = await _context.Standorte
+           .Select( s => new {s.IdOrt, s.Ort})
+           .ToListAsync();
+
+           return Ok(standorte);
         }
 
         [HttpGet("{id}")]
