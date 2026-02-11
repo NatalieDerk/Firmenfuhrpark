@@ -14,12 +14,14 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Alle Rollen abrufen
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rolle>>> GetRolle()
         {
             return await _context.Rollen.ToListAsync();
         }
 
+        // Rolle nach ID abrufen
         [HttpGet("{id}")]
         public async Task<ActionResult<Rolle>> GetRolle(int id)
         {
@@ -31,6 +33,7 @@ namespace Backend.Controllers
             return rolle;
         }
 
+        // Neue Rolle erstellen
         [HttpPost]
         public async Task<ActionResult<Rolle>> PostUser(Rolle rolle)
         {
@@ -39,6 +42,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetRolle), new { id = rolle.IdRolle }, rolle);
         }
 
+        // Rolle aktualisieren
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRolle(int id, Rolle rolle)
         {
@@ -66,6 +70,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        // Rolle löschen
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRolle(int id)
         {
@@ -80,6 +85,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        // Benutzer mit Rolle abrufen
         [HttpGet("user/{id}")]
         public async Task<ActionResult<object>> GetUserWihtRole(int id)
         {
