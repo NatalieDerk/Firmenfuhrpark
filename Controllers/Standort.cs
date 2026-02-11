@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Backend.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
+
 
 namespace Backend.Controllers
 {
@@ -25,9 +27,16 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Standort>> GetStandort(int id)
+        public async Task<ActionResult<StandortDto>> GetStandort(int id)
         {
-            var ort = await _context.Standorte.FindAsync(id);
+            var ort = await _context.Standorte
+                .Where(o => o.IdOrt == id)
+                .Select(o => new StandortDto{
+                    IdOrt = o.IdOrt,
+                    Ort = o.Ort
+                })
+                .FirstOrDefaultAsync();
+
             if (ort == null)
             {
                 return NotFound();
@@ -36,11 +45,18 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Standort>> PostStandort(Standort ort)
+        public async Task<ActionResult<StandortDto>> PostStandort(Standort ort)
         {
             _context.Standorte.Add(ort);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetStandort), new { id = ort.IdOrt }, ort);
+
+            var dto = new StandortDto
+            {
+                IdOrt = ort.IdOrt,
+                Ort = ort.Ort
+            };
+
+            return CreatedAtAction(nameof(GetStandort), new { id = ort.IdOrt }, dto);
         }
 
         [HttpPut("{id}")]

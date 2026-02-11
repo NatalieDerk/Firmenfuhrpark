@@ -65,7 +65,7 @@ namespace Backend.Controllers
             }
             return NoContent();
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRolle(int id)
         {
@@ -88,7 +88,7 @@ namespace Backend.Controllers
             .FirstOrDefaultAsync(u => u.IdUser == id);
 
             if (user == null)
-            return NotFound();
+                return NotFound();
 
             return new
             {
@@ -98,7 +98,7 @@ namespace Backend.Controllers
                 RoleId = user.IdRolle,
                 RoleName = user.Rolle.Name
             };
-         }
+        }
 
     }
 }

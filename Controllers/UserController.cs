@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Backend.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
 
@@ -15,9 +16,20 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            return await _context.Users.Include(u => u.Rolle).ToListAsync();
+            var users =  await _context.Users
+            .Include(u => u.Rolle)
+            .Select(u => new UserDto
+            {
+                IdUser = u.IdUser,
+                Vorname = u.Vorname,
+                Nachname = u.Nachname,
+                RolleName = u.Rolle.Name
+            })
+            .ToListAsync();
+
+            return Ok(users);
         }
 
         [HttpGet("{id}")]

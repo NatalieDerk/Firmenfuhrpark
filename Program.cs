@@ -36,7 +36,7 @@ builder.Services.AddDirectoryBrowser();
 var app = builder.Build();
 
 app.UseCors("AllowAngularDev"); 
-app.UseStaticFiles();  
+ 
 
 // Swagger-Middleware aktiviren
 if (app.Environment.IsDevelopment())
@@ -45,12 +45,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fuhpark API");
-        c.RoutePrefix = string.Empty; // Swagger-UI über Root-URL erreichbar (http://localhost:5156)
+        c.RoutePrefix = "swagger"; // Swagger-UI über Root-URL erreichbar (http://localhost:5156)
     });
 }
 
 
 app.MapControllers(); 
-app.MapFallbackToFile("index.html"); 
 app.MapHub<BookingHub>("/bookingHub"); 
 app.Run();

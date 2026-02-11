@@ -17,6 +17,9 @@ namespace Backend.Db_tables
     public string? Status { get; set; }
     public string? GrundDerBuchung { get; set; }
     public string? NameVonManager { get; set; }
+    public bool Locked { get; set; } = false;
+    public string? Tag { get; set; }
+    public bool Serienbuchung { get; set; } = false;
 
     public User? User { get; set; }
     public User? Manager { get; set; }

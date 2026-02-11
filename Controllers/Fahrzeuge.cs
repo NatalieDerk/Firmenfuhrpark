@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Backend.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Backend.Db_tables;
 
@@ -14,12 +15,31 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Gibt alle Fahrzeuge zurück
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Fahrzeuge>>> GetFahrzeuge()
+        public async Task<ActionResult<IEnumerable<FahrzeugeDto>>> GetFahrzeuge()
         {
-            return await _context.Fahrzeuge.Include(f => f.Standort).ToListAsync();
+            var cars = await _context.Fahrzeuge
+            .Include(f => f.Standort)
+            .Select(f => new FahrzeugeDto
+            {
+                IdCar = f.IdCar,
+                Marke = f.Marke,
+                Kennzeichnung = f.Kennzeichnung ?? "",
+
+                // Standort kann theoretisch null sein
+                Standort = new StandortDto
+                {
+                    IdOrt = f.Standort.IdOrt,
+                    Ort = f.Standort.Ort
+                }
+            })
+            .ToListAsync();
+
+            return Ok(cars);
         }
 
+        // Gibt ein einzelnes Fahrzeug nach ID zurück
         [HttpGet("{id}")]
         public async Task<ActionResult<Fahrzeuge>> GetFahrzeuge(int id)
         {
@@ -31,6 +51,7 @@ namespace Backend.Controllers
             return Ok(car);
         }
 
+        //Erstellt ein neues Fahrzeug
         [HttpPost]
         public async Task<ActionResult<Fahrzeuge>> PostFahrzeuge(Fahrzeuge car)
         {
@@ -39,6 +60,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetFahrzeuge), new { id = car.IdCar }, car);
         }
 
+        //Aktualisiert ein Fahrzeug
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFahrzeuge(int id, Fahrzeuge car)
         {
@@ -46,6 +68,7 @@ namespace Backend.Controllers
             {
                 return BadRequest();
             }
+            // Hier wird der komplette Entity überschrieben
             _context.Entry(car).State = EntityState.Modified;
 
             try
@@ -65,7 +88,8 @@ namespace Backend.Controllers
             }
             return NoContent();
         }
-        
+
+        // Löscht ein Fahrzeug
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFahrzeuge(int id)
         {

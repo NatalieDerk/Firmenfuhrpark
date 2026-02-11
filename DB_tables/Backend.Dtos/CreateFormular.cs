@@ -13,5 +13,7 @@ namespace Backend.Dtos
  
         public string Status { get; set; } = "pending";
         public string GrundDerBuchung { get; set; } = string.Empty;
+        public string? Tag { get; set;}
+        public bool Serienbuchung { get; set; } = false;
     }
 }

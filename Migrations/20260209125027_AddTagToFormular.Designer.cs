@@ -3,6 +3,7 @@ using System;
 using Backend.Db_tables;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260209125027_AddTagToFormular")]
+    partial class AddTagToFormular
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,9 +92,6 @@ namespace backend.Migrations
 
                     b.Property<string>("NameVonManager")
                         .HasColumnType("text");
-
-                    b.Property<bool>("Serienbuchung")
-                        .HasColumnType("boolean");
 
                     b.Property<TimeSpan?>("StartZeit")
                         .HasColumnType("interval");
