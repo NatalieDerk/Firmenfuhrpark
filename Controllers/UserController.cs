@@ -7,7 +7,7 @@ namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
         public UserController(ApplicationDBContext context)
@@ -15,10 +15,12 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        // Alle Benutzer abrufen (als DTO)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            var users =  await _context.Users
+            // Benutzer inkl. Rolle laden
+            var users = await _context.Users
             .Include(u => u.Rolle)
             .Select(u => new UserDto
             {
@@ -32,6 +34,7 @@ namespace Backend.Controllers
             return Ok(users);
         }
 
+        // Hier wird Entity User zurückgegeben (nicht DTO)
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -43,10 +46,11 @@ namespace Backend.Controllers
             return user;
         }
 
+        // Benutzer per Vorname und Nachname suchen
         [HttpGet("byname")]
         public async Task<ActionResult<User>> GetUserByName([FromQuery] string Vorname, [FromQuery] string Nachname)
         {
-            var user = await _context.Users.Include(u => u.Rolle).FirstOrDefaultAsync(u => u.Vorname == Vorname && u.Nachname == Nachname );
+            var user = await _context.Users.Include(u => u.Rolle).FirstOrDefaultAsync(u => u.Vorname == Vorname && u.Nachname == Nachname);
             if (user == null)
             {
                 return NotFound();
@@ -54,17 +58,21 @@ namespace Backend.Controllers
             return user;
         }
 
+        // Neue Benutzer erstellen
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            // Benutzer in die DB hinzufügen
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetUser), new { id = user.IdUser }, user);
         }
 
+        // Benutzer aktualisieren
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
+            // Prüfen, ob di IDs übereinstimmen
             if (id != user.IdUser)
             {
                 return BadRequest();
@@ -89,9 +97,11 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        // Benuzter löschen
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            // Benutzer suchen
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {

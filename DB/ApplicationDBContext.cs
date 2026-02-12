@@ -6,6 +6,7 @@ namespace Backend.Db_tables
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { }
 
+        // DB Tabelle
         public DbSet<Rolle> Rollen { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Standort> Standorte { get; set; }
@@ -14,6 +15,7 @@ namespace Backend.Db_tables
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Primary Keys für jede Tabelle definieren
             modelBuilder.Entity<Rolle>().HasKey(r => r.IdRolle);
             modelBuilder.Entity<User>().HasKey(u => u.IdUser);
             modelBuilder.Entity<Standort>().HasKey(s => s.IdOrt);
@@ -47,12 +49,12 @@ namespace Backend.Db_tables
            .WithMany()
            .HasForeignKey(f => f.IdCar)
            .OnDelete(DeleteBehavior.Restrict);
-            
-             modelBuilder.Entity<Formular>()
-            .HasOne(f => f.Standort)
-            .WithMany()
-            .HasForeignKey(f => f.IdOrt)
-            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Formular>()
+           .HasOne(f => f.Standort)
+           .WithMany()
+           .HasForeignKey(f => f.IdOrt)
+           .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
